@@ -8,7 +8,11 @@ import (
 )
 
 func AskFileFromMembers(filename string) (data []byte) {
-	conns := clientConnections[:]
+	conns := make(map[string]*net.TCPConn)
+	for k, v :=range clientConnections {
+		conns[k] = v
+	}
+
 	var err error
 	for host, conn := range conns {
 		err = requestFile(conn, filename)
@@ -34,7 +38,11 @@ func AskFileFromMembers(filename string) (data []byte) {
 }
 
 func DeleteFileFromMembers(filename string) {
-	conns := clientConnections[:]
+	conns := make(map[string]*net.TCPConn)
+	for k, v :=range clientConnections {
+		conns[k] = v
+	}
+
 	for host, conn := range conns {
 		err := requestFileDelete(conn, filename)
 		if err != nil {
