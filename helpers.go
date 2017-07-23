@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"io"
 	"net"
 )
 
@@ -50,4 +51,20 @@ func readData(conn *net.TCPConn) ([]byte, error) {
 
 		return send_data.Bytes(), nil
 	}
+}
+
+func sendFileIfExists(conn *net.TCPConn, filename string) error {
+	file_data := GetFile(filename)
+	if file_data == nil {
+		file_data = []byte{0}
+	}
+
+	file_data_len_bytes := make([]byte, 4)
+	binary.BigEndian.PutUint32(file_data_len_bytes, uint32(len(file_data)))
+
+	send_bytes := bytes.NewBuffer([]byte{})
+	send_bytes.Write(file_data_len_bytes)
+	send_bytes.Write(file_data)
+	_, err := io.Copy(conn, send_bytes)
+	return err
 }
