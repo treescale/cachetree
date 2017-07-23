@@ -3,13 +3,13 @@ package cachetree
 import (
 	"github.com/boltdb/bolt"
 	"log"
-	"time"
 	"strconv"
+	"time"
 )
 
 var (
-	cacheDB *bolt.DB
-	filesBucketName = []byte("files")
+	cacheDB             *bolt.DB
+	filesBucketName     = []byte("files")
 	keyTimersBucketName = []byte("keyTimer")
 )
 
