@@ -7,10 +7,16 @@ type CacheTreeConfig struct {
 	RequestTimeout int      `json:"request_timeout"`
 	BlobPath       string   `json:"blob_path"`
 	Targets        []string `json:"targets"`
+	ServerHost     string   `json:"server_host"`
 }
 
 func StartCachingService(config CacheTreeConfig) (err error) {
 	cacheDB, err = bolt.Open(config.BlobPath, 0666, nil)
+	if err != nil {
+		return err
+	}
+
+	err = startCacheServer(config.ServerHost)
 	if err != nil {
 		return err
 	}
