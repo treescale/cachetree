@@ -2,7 +2,6 @@ package cachetree
 
 import (
 	"github.com/boltdb/bolt"
-	"log"
 	"strconv"
 	"time"
 )
@@ -12,16 +11,6 @@ var (
 	filesBucketName     = []byte("files")
 	keyTimersBucketName = []byte("keyTimer")
 )
-
-func StartCachingService(config CacheTreeConfig) (err error) {
-	cacheDB, err = bolt.Open(config.BlobPath, 0666, nil)
-	if err != nil {
-		return err
-	}
-
-	go startClearTimer(config.KeyLifeTimeSec)
-	return nil
-}
 
 func GetFile(filename string) (data []byte) {
 	cacheDB.View(func(tx *bolt.Tx) error {
@@ -71,7 +60,6 @@ func startClearTimer(timeoutSeconds int) {
 			return stampBucket.ForEach(func(k, v []byte) error {
 				stamp, err := strconv.ParseInt(string(v), 10, 64)
 				if err != nil {
-					log.Println("Unable to parse file timestamp bytes to integer -> ", err.Error())
 					stampBucket.Delete(k)
 					fileBucket.Delete(k)
 					return nil
@@ -80,7 +68,6 @@ func startClearTimer(timeoutSeconds int) {
 				if stamp < minStamp {
 					stampBucket.Delete(k)
 					fileBucket.Delete(k)
-					log.Println("File [", string(k), "] deleted from cache after timeout -> ", stamp, minStamp)
 				}
 
 				return nil
