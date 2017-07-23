@@ -9,7 +9,7 @@ import (
 
 func AskFileFromMembers(filename string) (data []byte) {
 	conns := make(map[string]*net.TCPConn)
-	for k, v :=range clientConnections {
+	for k, v := range clientConnections {
 		conns[k] = v
 	}
 
@@ -39,7 +39,7 @@ func AskFileFromMembers(filename string) (data []byte) {
 
 func DeleteFileFromMembers(filename string) {
 	conns := make(map[string]*net.TCPConn)
-	for k, v :=range clientConnections {
+	for k, v := range clientConnections {
 		conns[k] = v
 	}
 
