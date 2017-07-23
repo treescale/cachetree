@@ -2,6 +2,11 @@ package cachetree
 
 import "github.com/boltdb/bolt"
 
+const (
+	CMD_REQUEST_FILE = byte('A')
+	CMD_FILE_DATA    = byte('B')
+)
+
 type CacheTreeConfig struct {
 	KeyLifeTimeSec int      `json:"key_lifetime"`
 	RequestTimeout int      `json:"request_timeout"`

@@ -44,3 +44,12 @@ func connectToMember(target string) {
 	clientConnections[target] = conn
 	connectionsLocker.Unlock()
 }
+
+func closeConn(host string) {
+	connectionsLocker.Lock()
+	if conn, ok := clientConnections[host]; ok {
+		conn.Close()
+		delete(clientConnections, host)
+	}
+	connectionsLocker.Unlock()
+}
