@@ -44,6 +44,15 @@ func PutFile(filename string, data []byte) error {
 	return err
 }
 
+func DeleteFile(filename string) {
+	cacheDB.Update(func(tx *bolt.Tx) error {
+		filename_data := []byte(filename)
+		tx.Bucket(filesBucketName).Delete(filename_data)
+		tx.Bucket(keyTimersBucketName).Delete(filename_data)
+		return nil
+	})
+}
+
 func startClearTimer(timeoutSeconds int) {
 	for {
 

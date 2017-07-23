@@ -4,7 +4,7 @@ import "github.com/boltdb/bolt"
 
 const (
 	CMD_REQUEST_FILE = byte('A')
-	CMD_FILE_DATA    = byte('B')
+	CMD_DELETE_FILE  = byte('B')
 )
 
 type CacheTreeConfig struct {

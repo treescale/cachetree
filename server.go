@@ -59,6 +59,22 @@ func handleServerConnection(conn *net.TCPConn) {
 				go HandleClientConnectionFailure(err, conn.RemoteAddr().String())
 				return
 			}
+			break
+
+		case CMD_DELETE_FILE:
+			filename_bytes, err := readData(conn)
+			if err != nil {
+				go HandleClientConnectionFailure(err, conn.RemoteAddr().String())
+				return
+			}
+
+			DeleteFile(string(filename_bytes))
+			err = writeData(conn, filename_bytes)
+			if err != nil {
+				go HandleClientConnectionFailure(err, conn.RemoteAddr().String())
+				return
+			}
 		}
+
 	}
 }
